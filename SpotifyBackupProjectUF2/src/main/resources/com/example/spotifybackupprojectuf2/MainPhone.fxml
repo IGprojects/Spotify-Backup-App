@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="520.0" minWidth="320.0" prefHeight="520.0" prefWidth="320.0" style="-fx-background-color: black;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.spotifybackupprojectuf2.MainPhoneController">
+<children>
+    <AnchorPane prefHeight="520.0" prefWidth="320.0" style="-fx-background-color: linear-gradient(black 50%,#1db954);">
+        <children>
+            <TextField fx:id="TextboxUsername1" layoutX="83.0" layoutY="260.0" prefHeight="31.0" prefWidth="200.0" promptText="Enter your User ID" style="-fx-border-color: #1db954; -fx-background-color: black;" />
+            <Button fx:id="buttonLogin1" layoutX="113.0" layoutY="419.0" mnemonicParsing="false" onAction="#ActionFerLogIn" prefHeight="31.0" prefWidth="103.0" text="Log in" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <ImageView fitHeight="31.0" fitWidth="29.0" layoutX="46.0" layoutY="261.0" opacity="0.71" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../../Images/profile_gren.png" />
+                </image>
+            </ImageView>
+            <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="50.0" layoutY="368.0" opacity="0.71" pickOnBounds="true" preserveRatio="true" visible="false">
+                <image>
+                    <Image url="@../../../Images/image.png" />
+                </image>
+            </ImageView>
+            <PasswordField fx:id="TextboxPassword1" layoutX="87.0" layoutY="367.0" prefHeight="31.0" prefWidth="200.0" promptText="Enter your password..." style="-fx-border-color: #1db954; -fx-background-color: black;" visible="false" />
+            <Text fill="#1db954" layoutX="50.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spotify Backup" textAlignment="CENTER" wrappingWidth="229.7177734375">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Text>
+            <Pane fx:id="ErrorPane" layoutX="7.0" layoutY="512.0" prefHeight="40.0" prefWidth="306.0" visible="false">
+               <children>
+                  <Button fx:id="buttonErrorLogin" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="306.0" style="-fx-background-color: #ff3333;" text="Invalid User ID" textFill="WHITE" />
+               </children>
+            </Pane>
+        </children>
+    </AnchorPane>
+</children>
+</Pane>

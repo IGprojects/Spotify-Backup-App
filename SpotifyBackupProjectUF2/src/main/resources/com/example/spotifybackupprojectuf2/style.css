@@ -1,0 +1,101 @@
+.text-field{
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-text-fill: #1db954;
+    -fx-highlight-text-fill: #1db954;
+
+}
+
+.button{
+    -fx-background-color: #1db954;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+}
+.button:hover {
+    -fx-background-color:  black;
+    -fx-border-color: #1db954;
+    -fx-highlight-text-fill: #1db954;
+    -fx-text-fill: #1db954;
+}
+
+.button:pressed {
+    -fx-background-color: #1db954;
+    -fx-text-fill: #1db954;
+}
+
+#buttonExit{
+    -fx-background-image: url('exit_green.png');
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-background-size: 70%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: black;
+    -fx-background-radius: 0px;
+}
+
+
+#buttonSelectFile{
+    -fx-background-image: url('lupa_green.png');
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-background-size: 70%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0px;
+}
+#buttonSelectFile:hover{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: url('lupa.png');
+}
+
+#buttonAjustes{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: url('blacksymbolajustes.png');
+    -fx-background-position: center;
+    -fx-background-size: 10%;
+    -fx-background-repeat: repeat;
+}
+
+#buttonAjustes:hover{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: url('whitesymbolajustes.png');
+}
+
+#buttonTancarAjustes:hover{
+    -fx-text-fill: #1db954;
+    -fx-border-color: transparent;
+}
+
+
+
+
+
+.table-view .column-header .label{
+    -fx-text-fill: white;
+    -fx-alignment: CENTER;
+}
+
+
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+#paneAjustes{
+    -fx-background-color: black;
+}
