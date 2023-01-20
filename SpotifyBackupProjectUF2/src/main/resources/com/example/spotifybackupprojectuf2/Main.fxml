@@ -5,38 +5,34 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="540.0" minWidth="820.0" prefHeight="540.0" prefWidth="820.0" style="-fx-background-color: black;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.spotifybackupprojectuf2.MainController">
+<AnchorPane maxHeight="540.0" maxWidth="820.0" prefHeight="540.0" prefWidth="820.0" style="-fx-background-color: linear-gradient(black 50%,#1db954);" stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.spotifybackupprojectuf2.MainController">
    <children>
-      <AnchorPane prefHeight="540.0" prefWidth="820.0" style="-fx-background-color: linear-gradient(black 50%,#1db954);">
+      <Text fill="#1db954" fontSmoothingType="LCD" layoutX="248.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spotify Backup" textAlignment="CENTER" wrappingWidth="325.0" AnchorPane.bottomAnchor="393.96484375" AnchorPane.leftAnchor="248.0" AnchorPane.rightAnchor="247.0" AnchorPane.topAnchor="98.15234375">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font>
+      </Text>
+      <TextField fx:id="TextboxUsername1" layoutX="329.0" layoutY="270.0" prefHeight="31.0" prefWidth="200.0" promptText="Enter your User ID" style="-fx-border-color: #1db954; -fx-background-color: black;" AnchorPane.leftAnchor="329.0" AnchorPane.rightAnchor="291.0" />
+      <Button fx:id="buttonLogin1" layoutX="367.0" layoutY="332.0" minHeight="31.0" minWidth="86.0" mnemonicParsing="false" onAction="#ActionFerLogIn" prefHeight="31.0" prefWidth="86.0" text="Log in" textFill="WHITE" AnchorPane.leftAnchor="367.0" AnchorPane.rightAnchor="367.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="31.0" fitWidth="29.0" layoutX="293.0" layoutY="271.0" opacity="0.71" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="293.0">
+         <image>
+            <Image url="@../../../Images/profile_gren.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="569.0" layoutY="496.0" opacity="0.71" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../../../Images/image.png" />
+         </image>
+      </ImageView>
+      <PasswordField fx:id="TextboxPassword1" layoutX="606.0" layoutY="495.0" prefHeight="31.0" prefWidth="200.0" promptText="Enter your password..." style="-fx-border-color: #1db954; -fx-background-color: black;" visible="false" />
+      <Pane fx:id="ErrorPane" layoutY="487.0" prefHeight="48.0" prefWidth="820.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Text fill="#1db954" fontSmoothingType="LCD" layoutX="248.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spotify Backup" textAlignment="CENTER" wrappingWidth="325.0">
-               <font>
-                  <Font name="System Bold Italic" size="36.0" />
-               </font>
-            </Text>
-            <TextField fx:id="TextboxUsername1" layoutX="329.0" layoutY="270.0" prefHeight="31.0" prefWidth="200.0" promptText="Enter your User ID" style="-fx-border-color: #1db954; -fx-background-color: black;" />
-            <Button fx:id="buttonLogin1" layoutX="367.0" layoutY="332.0" mnemonicParsing="false" onAction="#ActionFerLogIn" prefHeight="25.0" prefWidth="86.0" text="Log in" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <ImageView fitHeight="31.0" fitWidth="29.0" layoutX="293.0" layoutY="271.0" opacity="0.71" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../Images/profile_gren.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="569.0" layoutY="496.0" opacity="0.71" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../../../Images/image.png" />
-               </image>
-            </ImageView>
-            <PasswordField fx:id="TextboxPassword1" layoutX="606.0" layoutY="495.0" prefHeight="31.0" prefWidth="200.0" promptText="Enter your password..." style="-fx-border-color: #1db954; -fx-background-color: black;" visible="false" />
-            <Pane fx:id="ErrorPane" layoutY="487.0" prefHeight="48.0" prefWidth="820.0" visible="false">
-               <children>
-                  <Button fx:id="buttonErrorLogin" layoutX="253.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" style="-fx-background-color: #ff3333;" text="Error" textFill="WHITE" />
-               </children>
-            </Pane>
+            <Button fx:id="buttonErrorLogin" layoutX="253.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" style="-fx-background-color: #ff3333;" text="Error" textFill="WHITE" />
          </children>
-      </AnchorPane>
+      </Pane>
    </children>
-</Pane>
+</AnchorPane>

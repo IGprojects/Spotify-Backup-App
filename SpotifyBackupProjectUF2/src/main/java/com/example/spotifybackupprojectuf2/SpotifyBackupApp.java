@@ -12,7 +12,7 @@ public class SpotifyBackupApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SpotifyBackupApp.class.getResource("Main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 820.0, 540.0);
+        Scene scene = new Scene(fxmlLoader.  load(), 820.0, 540.0);
         stage.setTitle("Spotify Backup");
         stage.getIcons().add(new Image("C:\\Users\\iferr\\IdeaProjects\\SpotifyBackupProjectUF2\\src\\main\\resources\\Images\\icon.png"));
         stage.setScene(scene);

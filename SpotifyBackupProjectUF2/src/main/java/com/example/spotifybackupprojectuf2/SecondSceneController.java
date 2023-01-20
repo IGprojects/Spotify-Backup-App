@@ -54,8 +54,8 @@ public class SecondSceneController {
     public Button buttonTancarAjustes;
 
 
-    private static final String clientId = "";
-    private static final String clientSecret = "";
+    private static final String clientId = "e0d671dca23c455db7f81eb5c84da38d";
+    private static final String clientSecret = "fea42deaa6994ca3ac4872f05364a7da";
 
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId(clientId)
@@ -123,14 +123,23 @@ public class SecondSceneController {
         }
     }
     public void ActionRestoreBackup(ActionEvent actionEvent) {
+            //HI HAURAN DOS OPCIONS EN CAS DE QUE ES SELECCIONI UNA PLAYLIST AFEGIRA LA BACKUP A LA PLAYLIST SELECCIONADA(CONSTANT QUE HA DE SER COLABORATIVA)
+            //lA SEGONA OPCIO ES QUE ES CREI UNA NOVA PLAYLIST AMB EL NOM backupSpotify
             try{
-                String[] uris = new String[]{"spotify:track:01iyCAUm8EvOFqVWYJ3dVX", "spotify:episode:4GI3dxEafwap1sFiTGPKd1"};
-                AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(usuariIniciat.playlistsPubliques.get(playlistSeleccionada), uris).build();
-                SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
+                String[] uris = new String[]{};
+                llegirFitxer(new File(TextboxUbication.getText()),uris);
+                if(playlistSeleccionada!=null) {
+                    //PLAYLIST SELECCIONADA
+                    AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(usuariIniciat.playlistsPubliques.get(playlistSeleccionada), uris).build();
+                    SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
 
-
-                CreatePlaylistRequest createPlaylistRequest = spotifyApi.createPlaylist(usuariIniciat.idUSuari, "Playlist Backup").public_(true).build();
-                 Playlist playlist = createPlaylistRequest.execute();
+                }else{
+                    //PLAYLIST NO SELECCIONADA (CREA UNA NOVA)
+                    CreatePlaylistRequest createPlaylistRequest = spotifyApi.createPlaylist(usuariIniciat.idUSuari, "backupSpotify").public_(true).collaborative(true).build();
+                    Playlist playlist = createPlaylistRequest.execute();
+                    AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(playlist.getId(), uris).build();
+                    SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
+                }
             }catch (Exception e){}
         TextNotification.setText("Your backup has been restored");
         NotificationPanel.setVisible(true);
@@ -150,7 +159,8 @@ public class SecondSceneController {
                 GetPlaylistsItemsRequest getPlaylistsItemsRequest = spotifyApi.getPlaylistsItems(usuariIniciat.playlistsPubliques.get(playlistSeleccionada)).build();
                 Paging<PlaylistTrack> playlistTrackPaging = getPlaylistsItemsRequest.execute();
                 for(int i=0;i<playlistTrackPaging.getItems().length;i++){
-                    playlistBackup.put(playlistTrackPaging.getItems()[i].getTrack().getName(),playlistTrackPaging.getItems()[i].getTrack().getId());
+                    System.out.println(playlistTrackPaging.getItems()[i].getTrack());
+                    playlistBackup.put(playlistTrackPaging.getItems()[i].getTrack().getUri(),playlistTrackPaging.getItems()[i].getTrack().getName());
                 }
                 escriureFitxer(new File(TextboxUbication.getText()),playlistBackup);
             }catch (IOException | SpotifyWebApiException | ParseException e) {System.out.println("Error: " + e.getMessage());}
@@ -174,25 +184,28 @@ public class SecondSceneController {
     }
 
     public void ActonCambiarFileExplorer(ActionEvent actionEvent) {
-        File file=fileChooser.showOpenDialog(new Stage());
-        TextFieldRutaProgramaFileExplorer.setText(file.getPath());
-        TextFieldRutaProgramaFileExplorer.setPromptText(file.getPath());
-        RutaFileExplorer=TextFieldRutaProgramaFileExplorer.getText();
+            try{
+                File file=fileChooser.showOpenDialog(new Stage());
+                TextFieldRutaProgramaFileExplorer.setText(file.getPath());
+                TextFieldRutaProgramaFileExplorer.setPromptText(file.getPath());
+                RutaFileExplorer=TextFieldRutaProgramaFileExplorer.getText();
+            }catch(Exception e){System.out.println(e.getMessage());}
     }
 
-    public String llegirFitxer(File archivo) throws IOException {
+    public void llegirFitxer(File archivo,String[]idMusiques) throws IOException {
         String linea="";
 
         if(archivo.exists()) {
 
-        try{
-            FileReader fr = new FileReader (archivo);
-            BufferedReader br = new BufferedReader(fr);
-            linea = br.readLine();
+            try{
+                FileReader fr = new FileReader (archivo);
+                BufferedReader br = new BufferedReader(fr);
+                linea = br.readLine();
+                Arrays.stream(idMusiques).toList().add(linea.split("º")[0]);
 
-        }catch (Exception e){e.printStackTrace();}
+            }catch (Exception e){e.printStackTrace();}
         }
-        return linea;
+        System.out.println(idMusiques.toString());
     }
 
     public void escriureFitxer(File archivo,Map<String,String>playlistBackup) throws IOException {
