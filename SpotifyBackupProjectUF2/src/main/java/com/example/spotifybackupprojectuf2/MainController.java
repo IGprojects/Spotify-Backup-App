@@ -45,11 +45,8 @@ public class MainController {
     public Button buttonErrorLogin;
 
     public void ActionFerLogIn(ActionEvent actionEvent) throws IOException {
-        if(TextboxUsername1.getText()==null){
-            Alert missatge=new Alert(Alert.AlertType.ERROR);
-            missatge.setTitle("DADES INCORRECTES");
-            missatge.setHeaderText("Falten dades");
-            missatge.showAndWait();
+        if(TextboxUsername1.getText().isEmpty()){
+            ErrorPanelNotification("ID incorrecta");
         }else {
             usuari usuariNou = remplenarUsuari(TextboxUsername1.getText());
             Node node = (Node) actionEvent.getSource();
@@ -57,7 +54,7 @@ public class MainController {
             stage.close();
             try {
 
-                //QUI U FA DE FORMA QUE ES TANQUEN PER COMPLET LESCENA ACTUAL CAMBIANTALA PER LALTRE
+                //AQUI U FA DE FORMA QUE ES TANQUEN PER COMPLET LESCENA ACTUAL CAMBIANTALA PER LALTRE
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("SecondScene.fxml"));
 
                 SecondSceneController controller = new SecondSceneController();
@@ -80,33 +77,39 @@ public class MainController {
         String nouNomUsuari="";
         String nouImatgeUsuari="";
         Map<String,String>playlistsPubliques=new HashMap<String, String>();
+        if(id!="") {
+            usuari nouUsuari = new usuari(id, nouNomUsuari, nouImatgeUsuari, playlistsPubliques);
 
-        usuari nouUsuari=new usuari(id,nouNomUsuari,nouImatgeUsuari,playlistsPubliques);
+            try {
+                final CompletableFuture<ClientCredentials> clientCredentialsFuture = clientCredentialsRequest.executeAsync();
+                final ClientCredentials clientCredentials = clientCredentialsFuture.join();
+                spotifyApi.setAccessToken(clientCredentials.getAccessToken());
 
-        try {
-            final CompletableFuture<ClientCredentials> clientCredentialsFuture = clientCredentialsRequest.executeAsync();
-            final ClientCredentials clientCredentials = clientCredentialsFuture.join();
-            spotifyApi.setAccessToken(clientCredentials.getAccessToken());
+                //REMPLENAR DADES D'USUARI (NOM,URLIMATGE)
+                GetUsersProfileRequest getUsersProfileRequest = spotifyApi.getUsersProfile(id).build();
+                User user = getUsersProfileRequest.execute();
+                nouUsuari.nomUsuari = user.getDisplayName();
+                nouUsuari.urlFotoUsuari = user.getImages().toString();
 
-            //REMPLENAR DADES D'USUARI (NOM,URLIMATGE)
-            GetUsersProfileRequest getUsersProfileRequest = spotifyApi.getUsersProfile(id).build();
-            User user = getUsersProfileRequest.execute();
-            nouUsuari.nomUsuari=user.getDisplayName();
-            nouUsuari.urlFotoUsuari=user.getImages().toString();
-
-            //REMPLENAR PLAYLISTS PUBLIQUES DE L'USUARI
-            final GetListOfUsersPlaylistsRequest getListOfUsersPlaylistsRequest = spotifyApi.getListOfUsersPlaylists(id).build();
-            Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfUsersPlaylistsRequest.execute();
-            for(int i=0;i<playlistSimplifiedPaging.getItems().length;i++){
-                nouUsuari.playlistsPubliques.put(playlistSimplifiedPaging.getItems()[i].getName(),playlistSimplifiedPaging.getItems()[i].getId());
-            }
-        } catch (CompletionException e) {System.out.println("Error: " + e.getCause().getMessage()); ErrorPanelNotification(e.getCause().getMessage());
-        } catch (CancellationException e) {ErrorPanelNotification("Async operation cancelled.");
-        } catch (IOException e) {throw new RuntimeException(e);}
-        catch (ParseException e) {throw new RuntimeException(e);}
-        catch (SpotifyWebApiException e) {throw new RuntimeException(e);}
-
-        return nouUsuari;
+                //REMPLENAR PLAYLISTS PUBLIQUES DE L'USUARI
+                final GetListOfUsersPlaylistsRequest getListOfUsersPlaylistsRequest = spotifyApi.getListOfUsersPlaylists(id).build();
+                Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfUsersPlaylistsRequest.execute();
+                for (int i = 0; i < playlistSimplifiedPaging.getItems().length; i++) {
+                    nouUsuari.playlistsPubliques.put(playlistSimplifiedPaging.getItems()[i].getName(), playlistSimplifiedPaging.getItems()[i].getId());
+                }
+            } catch (CompletionException e) {
+                System.out.println("Error: " + e.getCause().getMessage());
+                ErrorPanelNotification(e.getCause().getMessage());
+            } catch (CancellationException e) {
+                ErrorPanelNotification("Async operation cancelled.");
+            } catch (IOException e) {throw new RuntimeException(e);
+            } catch (ParseException e) {throw new RuntimeException(e);
+            } catch (SpotifyWebApiException e) {throw new RuntimeException(e);}
+            return nouUsuari;
+        }else{
+            ErrorPanelNotification("ID incorrecta");
+            return null;
+        }
     }
 
 

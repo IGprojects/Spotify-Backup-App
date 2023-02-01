@@ -72,7 +72,7 @@
                               </Pane>
                               <Pane fx:id="NotificationPanel" layoutX="46.0" layoutY="99.0" prefHeight="25.0" prefWidth="247.0" visible="false">
                                  <children>
-                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#ActionObrirFitxer" prefHeight="25.0" prefWidth="247.0" style="-fx-background-color: white;" text="See" textAlignment="RIGHT" textFill="#1db954" />
+                                    <Button fx:id="buttonErrorNotification" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#ActionObrirFitxer" prefHeight="25.0" prefWidth="247.0" style="-fx-background-color: white;" text="See" textAlignment="RIGHT" textFill="#1db954" />
                                     <Text fx:id="TextNotification" layoutX="11.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your backup is ready" textAlignment="CENTER" wrappingWidth="206.13671875" />
                                  </children>
                               </Pane>

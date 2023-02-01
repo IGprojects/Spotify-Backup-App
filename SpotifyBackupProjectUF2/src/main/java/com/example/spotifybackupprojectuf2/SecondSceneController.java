@@ -52,6 +52,7 @@ public class SecondSceneController {
     public Pane paneAjustes;
     public TextField TextFieldRutaProgramaFileExplorer;
     public Button buttonTancarAjustes;
+    public Button buttonErrorNotification;
 
 
     private static final String clientId = "e0d671dca23c455db7f81eb5c84da38d";
@@ -126,19 +127,23 @@ public class SecondSceneController {
             //HI HAURAN DOS OPCIONS EN CAS DE QUE ES SELECCIONI UNA PLAYLIST AFEGIRA LA BACKUP A LA PLAYLIST SELECCIONADA(CONSTANT QUE HA DE SER COLABORATIVA)
             //lA SEGONA OPCIO ES QUE ES CREI UNA NOVA PLAYLIST AMB EL NOM backupSpotify
             try{
-                String[] uris = new String[]{};
-                llegirFitxer(new File(TextboxUbication.getText()),uris);
-                if(playlistSeleccionada!=null) {
-                    //PLAYLIST SELECCIONADA
-                    AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(usuariIniciat.playlistsPubliques.get(playlistSeleccionada), uris).build();
-                    SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
 
+                if(llegirFitxer(new File(TextboxUbication.getText()))!=null){
+                    String[] uris =llegirFitxer(new File(TextboxUbication.getText()));
+                    if(playlistSeleccionada!=null) {
+                        //PLAYLIST SELECCIONADA
+                        AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(usuariIniciat.playlistsPubliques.get(playlistSeleccionada), uris).build();
+                        SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
+
+                    }else{
+                        //PLAYLIST NO SELECCIONADA (CREA UNA NOVA)
+                        CreatePlaylistRequest createPlaylistRequest = spotifyApi.createPlaylist(usuariIniciat.idUSuari, "backupSpotify").public_(true).collaborative(true).build();
+                        Playlist playlist = createPlaylistRequest.execute();
+                        AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(playlist.getId(), uris).build();
+                        SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
+                    }
                 }else{
-                    //PLAYLIST NO SELECCIONADA (CREA UNA NOVA)
-                    CreatePlaylistRequest createPlaylistRequest = spotifyApi.createPlaylist(usuariIniciat.idUSuari, "backupSpotify").public_(true).collaborative(true).build();
-                    Playlist playlist = createPlaylistRequest.execute();
-                    AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(playlist.getId(), uris).build();
-                    SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
+                    ErrorPanelNotification("al llegir el fitxer");
                 }
             }catch (Exception e){}
         TextNotification.setText("Your backup has been restored");
@@ -162,16 +167,19 @@ public class SecondSceneController {
                     System.out.println(playlistTrackPaging.getItems()[i].getTrack());
                     playlistBackup.put(playlistTrackPaging.getItems()[i].getTrack().getUri(),playlistTrackPaging.getItems()[i].getTrack().getName());
                 }
-                escriureFitxer(new File(TextboxUbication.getText()),playlistBackup);
+                if(escriureFitxer(new File(TextboxUbication.getText()),playlistBackup)==true){
+                    TextNotification.setText("Your backup is ready");
+                    NotificationPanel.setVisible(true);
+                    FadeTransition trans = new FadeTransition(Duration.seconds(6), NotificationPanel);
+                    trans.setFromValue(100.0);
+                    trans.setToValue(0);
+                    trans.play();
+                    trans.setOnFinished(finish->{NotificationPanel.setVisible(false); trans.stop();});
+                }else{
+                    ErrorPanelNotification("al escriure el fitxer");
+                }
             }catch (IOException | SpotifyWebApiException | ParseException e) {System.out.println("Error: " + e.getMessage());}
 
-            TextNotification.setText("Your backup is ready");
-            NotificationPanel.setVisible(true);
-            FadeTransition trans = new FadeTransition(Duration.seconds(6), NotificationPanel);
-            trans.setFromValue(100.0);
-            trans.setToValue(0);
-            trans.play();
-            trans.setOnFinished(finish->{NotificationPanel.setVisible(false); trans.stop();});
         }
 
 
@@ -192,28 +200,40 @@ public class SecondSceneController {
             }catch(Exception e){System.out.println(e.getMessage());}
     }
 
-    public void llegirFitxer(File archivo,String[]idMusiques) throws IOException {
+    public String[] llegirFitxer(File archivo) throws IOException {
         String linea="";
-
-        if(archivo.exists()) {
-
+        ArrayList<String> albumsMusiques = new ArrayList<String>();
+        if(archivo.exists()&&archivo.getName().endsWith("txt")) {
             try{
                 FileReader fr = new FileReader (archivo);
                 BufferedReader br = new BufferedReader(fr);
                 linea = br.readLine();
-                Arrays.stream(idMusiques).toList().add(linea.split("º")[0]);
-
-            }catch (Exception e){e.printStackTrace();}
+                if (linea!=null){
+                String[]Album=linea.split("º");
+                albumsMusiques.add(Album[0]);
+                while(linea != null) {
+                    linea = br.readLine();
+                    if(linea==null){break;}
+                    Album=linea.split("º");
+                    albumsMusiques.add(Album[0]);
+                }
+                return ConvertArraylistToArray(albumsMusiques);
+                }else{
+                    return null;
+                }
+            }catch (Exception e){e.printStackTrace(); return null; }
+        }else{
+            return null;
         }
-        System.out.println(idMusiques.toString());
     }
 
-    public void escriureFitxer(File archivo,Map<String,String>playlistBackup) throws IOException {
-            if(archivo.exists()) {
+    public boolean escriureFitxer(File archivo, Map<String,String>playlistBackup) throws IOException {
+            if(archivo.exists()&&archivo.getName().endsWith("txt")) {
                 try (BufferedWriter bf = Files.newBufferedWriter(Path.of(archivo.getPath()),
                         StandardOpenOption.TRUNCATE_EXISTING)) {
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return false;
                 }
 
 
@@ -221,9 +241,13 @@ public class SecondSceneController {
                     for(int i=0;i<playlistBackup.size();i++){
                         out.write(playlistBackup.keySet().toArray()[i].toString()+"º"+playlistBackup.values().toArray()[i].toString()+'\n');
                     }
+                    return true;
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return false;
                 }
+            }else{
+                return false;
             }
     }
 
@@ -254,4 +278,25 @@ public class SecondSceneController {
     public void setUsuariIniciat(usuari nouusuari){
         this.usuariIniciat=nouusuari;
     }
+
+    public void ErrorPanelNotification(String tipusError){
+        buttonErrorNotification.setText("Errror "+tipusError);
+        NotificationPanel.setVisible(true);
+        FadeTransition trans = new FadeTransition(Duration.seconds(6), NotificationPanel);
+        trans.setFromValue(100.0);
+        trans.setToValue(0);
+        trans.play();
+        trans.setOnFinished(finish->{NotificationPanel.setVisible(false); trans.stop();});
+        }
+
+    public String[] ConvertArraylistToArray(ArrayList<String>Arraylist1)
+    {
+        String[] newArray = new String[Arraylist1.size()];
+        for(int i=0;i<Arraylist1.size();i++)
+        {
+            newArray[i] = Arraylist1.get(i);
+        }
+        return newArray;
+    }
+
 }

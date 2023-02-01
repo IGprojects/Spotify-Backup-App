@@ -1,5 +1,7 @@
 package com.example.spotifybackupprojectuf2;
 
+import org.junit.Test;
+
 public class album {
     String nomAlbum;
 

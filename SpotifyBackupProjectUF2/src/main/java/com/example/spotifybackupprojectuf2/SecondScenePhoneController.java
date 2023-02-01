@@ -31,15 +31,13 @@ import se.michaelthelin.spotify.requests.data.playlists.AddItemsToPlaylistReques
 import se.michaelthelin.spotify.requests.data.playlists.CreatePlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistsItemsRequest;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -56,6 +54,7 @@ public class SecondScenePhoneController {
     public TableColumn <album,String>ColumnNomsAlbums;
     public Pane NotificationPanel;
     public Text TextNotification;
+    public Button buttonErrorNotification;
     FileChooser fileChooser=new FileChooser();
     public usuari usuariIniciat;
     String playlistSeleccionada="";
@@ -94,31 +93,43 @@ public class SecondScenePhoneController {
             for(int i=0;i<playlistTrackPaging.getItems().length;i++){
                 playlistBackup.put(playlistTrackPaging.getItems()[i].getTrack().getName(),playlistTrackPaging.getItems()[i].getTrack().getId());
             }
-            escriureFitxer(new File(TextfieldFile.getText()),playlistBackup);
+            if(escriureFitxer(new File(TextfieldFile.getText()),playlistBackup)==true){
+                TextNotification.setText("Your backup is ready");
+                NotificationPanel.setVisible(true);
+                FadeTransition trans = new FadeTransition(Duration.seconds(4), NotificationPanel);
+                trans.setFromValue(100.0);
+                trans.setToValue(0);
+                trans.play();
+                trans.setOnFinished(finish->{NotificationPanel.setVisible(false); trans.stop();});
+            }else{
+                ErrorPanelNotification("al escriure el fitxer");
+            }
         }catch (IOException | SpotifyWebApiException | ParseException e) {System.out.println("Error: " + e.getMessage());}
 
-        TextNotification.setText("Your backup is ready");
-        NotificationPanel.setVisible(true);
-        FadeTransition trans = new FadeTransition(Duration.seconds(4), NotificationPanel);
-        trans.setFromValue(100.0);
-        trans.setToValue(0);
-        trans.play();
-        trans.setOnFinished(finish->{NotificationPanel.setVisible(false); trans.stop();});
+
     }
 
     public void ActionRestoreBackup(ActionEvent actionEvent) throws InterruptedException {
-        //PENDENT
         try{
-            String[] uris = new String[]{"spotify:track:01iyCAUm8EvOFqVWYJ3dVX", "spotify:episode:4GI3dxEafwap1sFiTGPKd1"};
-            AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(usuariIniciat.playlistsPubliques.get(playlistSeleccionada), uris).build();
-            SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
 
+            if(llegirFitxer(new File(TextfieldFile.getText()))!=null){
+                String[] uris =llegirFitxer(new File(TextfieldFile.getText()));
+                if(playlistSeleccionada!=null) {
+                    //PLAYLIST SELECCIONADA
+                    AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(usuariIniciat.playlistsPubliques.get(playlistSeleccionada), uris).build();
+                    SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
 
-            CreatePlaylistRequest createPlaylistRequest = spotifyApi.createPlaylist(usuariIniciat.idUSuari, "Playlist Backup").public_(true).build();
-            Playlist playlist = createPlaylistRequest.execute();
+                }else{
+                    //PLAYLIST NO SELECCIONADA (CREA UNA NOVA)
+                    CreatePlaylistRequest createPlaylistRequest = spotifyApi.createPlaylist(usuariIniciat.idUSuari, "backupSpotify").public_(true).collaborative(true).build();
+                    Playlist playlist = createPlaylistRequest.execute();
+                    AddItemsToPlaylistRequest addItemsToPlaylistRequest = spotifyApi.addItemsToPlaylist(playlist.getId(), uris).build();
+                    SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
+                }
+            }else{
+                ErrorPanelNotification("al llegir el fitxer");
+            }
         }catch (Exception e){}
-
-
         TextNotification.setText("Your backup has been restored");
         NotificationPanel.setVisible(true);
         FadeTransition trans = new FadeTransition(Duration.seconds(4), NotificationPanel);
@@ -160,13 +171,13 @@ public class SecondScenePhoneController {
         }
     }
 
-
-    public void escriureFitxer(File archivo, Map<String,String> playlistBackup) throws IOException {
-        if(archivo.exists()) {
+    public boolean escriureFitxer(File archivo, Map<String,String>playlistBackup) throws IOException {
+        if(archivo.exists()&&archivo.getName().endsWith("txt")) {
             try (BufferedWriter bf = Files.newBufferedWriter(Path.of(archivo.getPath()),
                     StandardOpenOption.TRUNCATE_EXISTING)) {
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
 
 
@@ -174,12 +185,42 @@ public class SecondScenePhoneController {
                 for(int i=0;i<playlistBackup.size();i++){
                     out.write(playlistBackup.keySet().toArray()[i].toString()+"º"+playlistBackup.values().toArray()[i].toString()+'\n');
                 }
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
+        }else{
+            return false;
         }
     }
 
+    public String[] llegirFitxer(File archivo) throws IOException {
+        String linea="";
+        ArrayList<String> albumsMusiques = new ArrayList<String>();
+        if(archivo.exists()&&archivo.getName().endsWith("txt")) {
+            try{
+                FileReader fr = new FileReader (archivo);
+                BufferedReader br = new BufferedReader(fr);
+                linea = br.readLine();
+                if (linea!=null){
+                    String[]Album=linea.split("º");
+                    albumsMusiques.add(Album[0]);
+                    while(linea != null) {
+                        linea = br.readLine();
+                        if(linea==null){break;}
+                        Album=linea.split("º");
+                        albumsMusiques.add(Album[0]);
+                    }
+                    return ConvertArraylistToArray(albumsMusiques);
+                }else{
+                    return null;
+                }
+            }catch (Exception e){e.printStackTrace(); return null; }
+        }else{
+            return null;
+        }
+    }
 
     public void BuscarPlaylistsUsuari(String nomUsuari,ObservableList <album>llistatAlbumsParam){
         for(int i=0;i<usuariIniciat.playlistsPubliques.size();i++){
@@ -190,5 +231,22 @@ public class SecondScenePhoneController {
         this.usuariIniciat=nouusuari;
     }
 
-
+    public void ErrorPanelNotification(String tipusError){
+        buttonErrorNotification.setText("Errror "+tipusError);
+        NotificationPanel.setVisible(true);
+        FadeTransition trans = new FadeTransition(Duration.seconds(6), NotificationPanel);
+        trans.setFromValue(100.0);
+        trans.setToValue(0);
+        trans.play();
+        trans.setOnFinished(finish->{NotificationPanel.setVisible(false); trans.stop();});
+    }
+    public String[] ConvertArraylistToArray(ArrayList<String> Arraylist1)
+    {
+        String[] newArray = new String[Arraylist1.size()];
+        for(int i=0;i<Arraylist1.size();i++)
+        {
+            newArray[i] = Arraylist1.get(i);
+        }
+        return newArray;
+    }
 }
