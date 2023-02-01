@@ -30,3 +30,13 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 <li>mvn build</li>
 <li>Creara la carpeta <Target> on trobarem el .jar</li>
 </ol>
+
+·Como obtener .exe <a href="https://www.youtube.com/watch?v=NRptmWyrvvo">Video</a>:
+<ol>
+<li>Tener JAR abrir LAunch4j</li>
+<li>Poner JAR i icono</li>
+<li>Selecciona donde quiere que cree el archivo .exe</li>
+<li>En la pestanya JRE poner la minima version</li>
+<li>Seguidamente pulsamos ajustes seleccionamos ajustes y el path donde ira el exe</li>
+<li>Por ultimo si no ha salido ningun error nos habra creado el .exe</li>
+</ol>
