@@ -22,9 +22,11 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 
 ### Mini Documentacion
 ·Como Obtener .jar <a href="https://www.youtube.com/watch?v=EyYb0GmtEX4">Video</a>
-  0.Crear launcher que en el main executi el App.main
-  1.Actualizar pom.xml
-  2.Pulasr Ctrl+Ctrl 
-  3.mvn clean
-  4.mvn build
-  5.Creara la carpeta <Target> on trobarem el .jar
+<ol>
+<li>Crear launcher que en el main executi el App.main</li>
+<li>Actualizar pom.xml</li>
+<li>Pulasr Ctrl+Ctrl </li>
+<li>mvn clean</li>
+<li>mvn build</li>
+<li>Creara la carpeta <Target> on trobarem el .jar</li>
+</ol>
