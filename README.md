@@ -21,7 +21,6 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 
 
 ### Mini Documentacion
-<br /><br />
 
 ·Como Obtener .jar <a href="https://www.youtube.com/watch?v=EyYb0GmtEX4">Video</a>:
 <ol>
