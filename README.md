@@ -22,17 +22,17 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 
 ### Mini Documentacion
 
-#### Como Obtener .jar <a href="https://www.youtube.com/watch?v=EyYb0GmtEX4">Video</a>:
+#### ·Como Obtener .jar <a href="https://www.youtube.com/watch?v=EyYb0GmtEX4">Video</a>:
 <ol>
 <li>Crear launcher que en el main executi el App.main</li>
 <li>Actualizar pom.xml</li>
 <li>Pulasr Ctrl+Ctrl </li>
 <li>mvn clean</li>
 <li>mvn build</li>
-<li>Creara la carpeta <Target> on trobarem el .jar</li>
+<li>Creará la carpeta <Target> on trobarem el .jar</li>
 </ol>
 
-·Como obtener .exe <a href="https://www.youtube.com/watch?v=NRptmWyrvvo">Video</a>:
+#### ·Como obtener .exe <a href="https://www.youtube.com/watch?v=NRptmWyrvvo">Video</a>:
 <ol>
 <li>Tener JAR abrir LAunch4j</li>
 <li>Poner JAR i icono</li>
@@ -41,3 +41,14 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 <li>Seguidamente pulsamos ajustes seleccionamos ajustes y el path donde ira el exe</li>
 <li>Por ultimo si no ha salido ningun error nos habra creado el .exe</li>
 </ol>
+
+#### ·Como obtener .msi <a href="https://www.youtube.com/watch?v=LIk0Z0THuGQ">Video</a>:
+<ol>
+<li>Tener EXE abrir <a href="https://www.mediafire.com/file/sjhfgeow8pykuqw/MSI_Wrapper_10_0_51_0.msi/file">MSI WRAPPER</a></li>
+<li>Selecciona el .exe y donde quieres que cree el .msi</li>
+<li>Añade la ID automatica que te da el programa</li>
+<li>(Opcional) Añade información de contacto y otras información para el .msi</li>
+<li>Pulsa build y podrás encontrar el .msi en la ruta indicada anteriormente</li>
+</ol>
+
+
