@@ -22,7 +22,7 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 
 ### Mini Documentacion
 
-·Como Obtener .jar <a href="https://www.youtube.com/watch?v=EyYb0GmtEX4">Video</a>:
+#### Como Obtener .jar <a href="https://www.youtube.com/watch?v=EyYb0GmtEX4">Video</a>:
 <ol>
 <li>Crear launcher que en el main executi el App.main</li>
 <li>Actualizar pom.xml</li>
