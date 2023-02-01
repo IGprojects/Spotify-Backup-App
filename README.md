@@ -18,3 +18,13 @@ ten en cuenta que solo podrás hacer backups de las Playlists que tienes publica
 ![image](https://github.com/IGprojects/Spotify-Backup-App/blob/main/Assets/Captura5.png)
 ![image](https://github.com/IGprojects/Spotify-Backup-App/blob/main/Assets/Captura6.png)
 ![image](https://github.com/IGprojects/Spotify-Backup-App/blob/main/Assets/Captura7.png)
+
+
+### Mini Documentacion
+·Como Obtener .jar (https://www.youtube.com/watch?v=EyYb0GmtEX4):
+  0.Crear launcher que en el main executi el App.main
+  1.Actualizar pom.xml
+  2.Pulasr Ctrl+Ctrl 
+  3.mvn clean
+  4.mvn build
+  5.Creara la carpeta <Target> on trobarem el .jar
