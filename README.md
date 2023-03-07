@@ -1,5 +1,6 @@
 # Spotify-Backup-App 
 ## Descripción
+No pierdas tus Playlists con Spotify Backup con solo el ID de tu usuario de Spotify, podrás crear backups de tus playlists favoritas.
 Con esta aplicación podras Crear Backups de Playlists de Sppotiffy favoritas. Tambien las podrás restaurar.
 
 ## Como conseguir la Id de tu usuario de Spotify?
